@@ -10,7 +10,7 @@ import cors from 'cors';
  
  const app = express();
  app.use(cors({
-  origin: "http://localhost:4000",  // Replace with your frontend URL(s)
+  origin: "https://global-newscom.vercel.app/",  // Replace with your frontend URL(s)
   credentials: true,  // Allow cookies and authorization headers
   methods: ["GET", "POST", "PUT", "DELETE"],  // Allow these HTTP methods
   allowedHeaders: ["Content-Type", "Authorization"],  // Specify allowed headers
