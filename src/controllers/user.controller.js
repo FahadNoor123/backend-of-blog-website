@@ -107,7 +107,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
         const options = {
             httpOnly: false,
-            secure: false,  // ✅ Must be `true` if using on local development
+            secure: true,  // ✅ Must be `true` if using on local development
             // secure: true, // ✅ Must be `true` if using on productop
          
         };
