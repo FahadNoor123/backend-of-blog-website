@@ -106,7 +106,7 @@ const loginUser = asyncHandler(async (req, res) => {
         console.log("Generated Access Token:", accessToken);
 
         const options = {
-            httpOnly: true,
+            httpOnly: false,
             secure: true,// ✅ Must be `true` if using on local development
             // secure: true, // ✅ Must be `true` if using on productop
             sameSite: 'None'  
