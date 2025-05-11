@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { createBlog, getBlogs, getBlogBySlug, deleteBlogBySlug} from "../controllers/blog.controller.js";
+import {getAllContactMessages} from "../controllers/contact.controller.js";
+
 import {uploadProfileImage } from '../middlewares/multer.middleware.js';
 import { editBlog} from "../controllers/adminBlog.controller.js";
 
@@ -20,4 +22,9 @@ router.route("/getblog/:slug").get(getBlogBySlug);
 router.route("/editblog/:slug").put(uploadProfileImage.array('blogImage'),editBlog);
 router.route("/deleteblog/:slug").delete(deleteBlogBySlug);
 
+
+
+
+//Cotact Form related Admin Routes
+router.route("/contact/get-all-contact-messages").get(getAllContactMessages);
 export default router
