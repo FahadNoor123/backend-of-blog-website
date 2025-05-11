@@ -210,11 +210,37 @@ const getBlogBySlug = async (req, res) => {
 
 
 
+// DELETE /api/v1/blog/deleteblog/:slug
+const deleteBlogBySlug = async (req, res) => {
+
+  try {
+    const { slug } = req.params;
+console.log(slug,"this is slug")
+    const deletedBlog = await Blog.findOneAndDelete({ slug });
+
+    if (!deletedBlog) {
+      return res.status(404).json({ message: 'Blog not found' });
+    }
+
+    res.status(200).json({ message: 'Blog deleted successfully' });
+  } catch (error) {
+    console.error('Delete error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+
+
+
+
+
 
 
     export {
         createBlog,
         getBlogs,
         getBlogBySlug,
-        getRelatedBlogs
+        getRelatedBlogs,
+        deleteBlogBySlug
     }

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createBlog, getBlogs, getBlogBySlug} from "../controllers/blog.controller.js";
+import { createBlog, getBlogs, getBlogBySlug, deleteBlogBySlug} from "../controllers/blog.controller.js";
 import {uploadProfileImage } from '../middlewares/multer.middleware.js';
 import { editBlog} from "../controllers/adminBlog.controller.js";
 
@@ -18,5 +18,6 @@ router.route("/getblogs").get( getBlogs)
 
 router.route("/getblog/:slug").get(getBlogBySlug);
 router.route("/editblog/:slug").put(uploadProfileImage.array('blogImage'),editBlog);
+router.route("/deleteblog/:slug").delete(deleteBlogBySlug);
 
 export default router
