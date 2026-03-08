@@ -11,7 +11,8 @@ const createBlog = async (req, res) => {
     try {
         console.log("Request Body:", req.body); // Debugging log
 
-        const { title, content, category, metaTitle, metaDescription, keywords, slug, tags, externalLinks, isFeatured } = req.body;
+        const { title, content, category, metaTitle, metaDescription, keywords, slug, tags, externalLinks, isFeatured,postStatus,
+  scheduledAt } = req.body;
 
         if (!title) {
             return res.status(400).json({ message: "Title is required" });
@@ -104,9 +105,12 @@ const sanitizedContent = sanitizeHtml(content, {
             tags,
             externalLinks,
             isFeatured,
-            isPublished: true,
+            
             publishedAt: new Date(),
         });
+        if (postStatus === "Published") {
+  blog.publishedAt = new Date();
+}
 
         await blog.save();
 

@@ -85,10 +85,7 @@ const blogSchema = new mongoose.Schema(
     scheduledAt: { 
       type: Date 
     }, // For scheduling posts
-    isPublished: {
-      type: Boolean,
-      default: false,
-    },
+   
     createdAt: { type: Date, default: Date.now },
 
     updatedAt: { type: Date, default: Date.now },
