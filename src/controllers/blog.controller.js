@@ -139,7 +139,7 @@ const getBlogs = async (req, res) => {
     const filter = category ? { category: { $regex: `^${category}$`, $options: "i" } } : {};
 
     // Fetch blogs with pagination & category filter
-    const blogs = await Blog.find(filter)
+    const blogs = await Blog.find({ ...filter, postStatus: "Published" })
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
