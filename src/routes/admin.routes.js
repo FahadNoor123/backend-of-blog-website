@@ -3,7 +3,7 @@ import { createBlog, getBlogs, getBlogBySlug, deleteBlogBySlug} from "../control
 import {getAllContactMessages} from "../controllers/contact.controller.js";
 
 import {uploadProfileImage } from '../middlewares/multer.middleware.js';
-import { editBlog} from "../controllers/adminBlog.controller.js";
+import { editBlog, getAdminBlogs, updateBlogStatus} from "../controllers/adminBlog.controller.js";
 
 import {adminMiddleware } from '../middlewares/admin.middlerware.js';
 
@@ -16,7 +16,8 @@ router.use(adminMiddleware);
 router.route("/createblog").post(  uploadProfileImage.array('blogImage'), // Use uploadAvatar middleware for single file upload of 'avatar' field
 createBlog)
 
-router.route("/getblogs").get( getBlogs)
+router.route("/getblogs").get( getAdminBlogs)
+router.route("/updatestatus/:slug").put(updateBlogStatus); // Quick status update
 
 router.route("/getblog/:slug").get(getBlogBySlug);
 router.route("/editblog/:slug").put(uploadProfileImage.array('blogImage'),editBlog);

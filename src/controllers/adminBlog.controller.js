@@ -142,4 +142,68 @@ if (req.files?.length > 0 && blogPost.blogImage?.length > 0) {
     }
 };
 
-export { editBlog };
+
+const getAdminBlogs = async (req, res) => {
+  try {
+    console.log("Admin get blogs hit");
+    const blogs = await Blog.find()
+      .populate('author', 'name email') // Populate author with name and email
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      blogs
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Quick Status Update (for publishing/drafting/scheduling)
+const updateBlogStatus = async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const { postStatus, scheduledAt } = req.body;
+
+    if (!slug) return res.status(400).json({ message: "Slug is required" });
+    if (!postStatus) return res.status(400).json({ message: "Post status is required" });
+
+    // Validate postStatus
+    if (!['Draft', 'Published', 'Scheduled'].includes(postStatus)) {
+      return res.status(400).json({ message: "Invalid post status" });
+    }
+
+    // Find and update the blog
+    const updateData = { postStatus };
+    
+    if (postStatus === 'Published') {
+      updateData.publishedAt = new Date();
+    } else if (postStatus === 'Scheduled' && scheduledAt) {
+      updateData.scheduledAt = new Date(scheduledAt);
+    }
+
+    const updatedBlog = await Blog.findOneAndUpdate(
+      { slug },
+      updateData,
+      { new: true }
+    );
+
+    if (!updatedBlog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Blog ${postStatus.toLowerCase()} successfully`,
+      blog: updatedBlog
+    });
+  } catch (error) {
+    console.error("Error updating blog status:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export { editBlog, getAdminBlogs, updateBlogStatus };
+
