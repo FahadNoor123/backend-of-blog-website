@@ -146,6 +146,20 @@ if (req.files?.length > 0 && blogPost.blogImage?.length > 0) {
 const getAdminBlogs = async (req, res) => {
   try {
     console.log("Admin get blogs hit");
+     // First, publish any scheduled blogs that have reached their time
+    const now = new Date();
+    console.log(`Admin check - Current time: ${now.toISOString()}`);
+    
+    const scheduledBlogs = await Blog.updateMany(
+      {
+        postStatus: "Scheduled",
+        scheduledAt: { $lte: now }
+      },
+      {
+        $set: { postStatus: "Published", publishedAt: now }
+      }
+    );
+    
     const blogs = await Blog.find()
       .populate('author', 'name email') // Populate author with name and email
       .sort({ createdAt: -1 });

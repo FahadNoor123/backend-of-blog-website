@@ -138,7 +138,28 @@ const getBlogs = async (req, res) => {
     console.log("Category received:", category);
     const categories = await Blog.distinct("category");
     console.log("Available Categories in DB:", categories);
-    
+     const now = new Date();
+
+  // Step 1: publish scheduled blogs that have reached their time
+  console.log(`Current time: ${now.toISOString()}`);
+  
+  // First, let's see what scheduled blogs exist
+  const allScheduled = await Blog.find({ postStatus: "Scheduled" }).select('title scheduledAt');
+  console.log("Scheduled blogs in DB:");
+  allScheduled.forEach(blog => {
+    console.log(`- ${blog.title}: scheduledAt = ${blog.scheduledAt}, isPast = ${blog.scheduledAt <= now}`);
+  });
+
+  const scheduledBlogs = await Blog.updateMany(
+    {
+      postStatus: "Scheduled",
+      scheduledAt: { $lte: now }
+    },
+    {
+      $set: { postStatus: "Published", publishedAt: now }
+    }
+  );
+
     // Apply category filter if provided
     const filter = category ? { category: { $regex: `^${category}$`, $options: "i" } } : {};
 

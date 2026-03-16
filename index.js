@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import express from 'express';
 import { app } from './src/app.js'; // Corrected import
 
-import blogScheduler from "./utils/blogScheduler.js";// Import the scheduler
+
 
 dotenv.config({
     path: './.env'
@@ -35,30 +35,6 @@ app.use(express.json());
 
 
 
-
-app.get("/api/cron/publish-blogs", async (req, res) => {
-
-  try {
-
-    // Security check (important)
-    if (req.headers["x-vercel-cron"] !== "1") {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-
-    const result = await blogScheduler.checkAndPublishScheduledBlogs();
-
-    res.json({
-      message: "Cron executed successfully",
-      result
-    });
-
-  } catch (error) {
-    res.status(500).json({
-      error: error.message
-    });
-  }
-
-});
 
 
 connectDB()
